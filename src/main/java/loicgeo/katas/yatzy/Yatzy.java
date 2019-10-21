@@ -44,7 +44,29 @@ public class Yatzy {
         ),
         SIXES(diceSerie ->
                 sumOccurrencesByValue(diceSerie, 6)
-        );
+        ),
+
+        // sum values for the best pair
+        PAIR(diceSerie -> {
+            int maxMatches = 1;
+
+            int[] countsByValue = diceSerie.getOccurrenciesByDiceValue();
+
+            int score = 0;
+            int nbMatchs = 0;
+            int nbOccurrencesMin = 2;
+            for (int currentValue = countsByValue.length - 1; currentValue > 0; currentValue--) {
+                int nbOccurrencesOfCurrentValue = countsByValue[currentValue];
+                if (nbOccurrencesOfCurrentValue >= nbOccurrencesMin) {
+                    nbMatchs++;
+                    score += currentValue * Math.min(nbOccurrencesOfCurrentValue, nbOccurrencesMin);
+                    if (nbMatchs >= maxMatches) {
+                        break;
+                    }
+                }
+            }
+            return score;
+        });
 
         private static Integer sumOccurrencesByValue(DiceSerie diceSerie, int value) {
             return diceSerie.getValues().stream()
@@ -86,20 +108,6 @@ public class Yatzy {
 
     public int scoreDices(RollType rollType) {
         return rollType.score(diceSerie);
-    }
-
-    public static int score_pair(int d1, int d2, int d3, int d4, int d5) {
-        int[] counts = new int[6];
-        counts[d1 - 1]++;
-        counts[d2 - 1]++;
-        counts[d3 - 1]++;
-        counts[d4 - 1]++;
-        counts[d5 - 1]++;
-        int at;
-        for (at = 0; at != 6; at++)
-            if (counts[6 - at - 1] >= 2)
-                return (6 - at) * 2;
-        return 0;
     }
 
     public static int two_pair(int d1, int d2, int d3, int d4, int d5) {

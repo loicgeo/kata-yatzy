@@ -3,10 +3,14 @@ package loicgeo.katas.yatzy;
 import loicgeo.katas.yatzy.exception.FonctionalException;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static java.text.MessageFormat.format;
 import static java.util.Arrays.asList;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 public class DiceSerie {
 
@@ -38,6 +42,15 @@ public class DiceSerie {
                             MAX_DICE_VALUE
                     ));
         }
+    }
+
+    public int[] getOccurrenciesByDiceValue() {
+        int[] countsByValue = new int[MAX_DICE_VALUE + 1];
+
+        Map<Integer, Long> countsByValueMap = values.stream().collect(groupingBy(identity(), counting()));
+        countsByValueMap.forEach((value, count) -> countsByValue[value] = count.intValue());
+
+        return countsByValue;
     }
 
     public Collection<Integer> getValues() {
