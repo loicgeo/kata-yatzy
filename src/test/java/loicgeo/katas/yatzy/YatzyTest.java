@@ -5,6 +5,7 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 
 import static loicgeo.katas.yatzy.Yatzy.RollType.CHANCE;
+import static loicgeo.katas.yatzy.Yatzy.RollType.YATZY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
@@ -35,12 +36,23 @@ public class YatzyTest {
     }
 
     @Test
-    public void yatzy_scores_50() {
-        int expected = 50;
-        int actual = Yatzy.yatzy(4, 4, 4, 4, 4);
-        assertEquals(expected, actual);
-        assertEquals(50, Yatzy.yatzy(6, 6, 6, 6, 6));
-        assertEquals(0, Yatzy.yatzy(6, 6, 6, 6, 3));
+    public void should_score_50_a_dice_serie_for_a_yatzy_roll() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(4, 4, 4, 4, 4);
+        // when
+        int score = yatzy.scoreDices(YATZY);
+        // then
+        assertThat(score).isEqualTo(50);
+    }
+
+    @Test
+    public void should_score_0_a_dice_serie_for_a_non_yatzy_roll() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(6, 6, 6, 6, 3);
+        // when
+        int score = yatzy.scoreDices(YATZY);
+        // then
+        assertThat(score).isEqualTo(0);
     }
 
     @Test

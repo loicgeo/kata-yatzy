@@ -14,7 +14,18 @@ public class Yatzy {
     private int[] dice;
 
     public enum RollType {
-        CHANCE(diceSerie -> diceSerie.getValues().stream().reduce(0, Integer::sum));
+        // sum all values
+        CHANCE(diceSerie ->
+                diceSerie.getValues().stream()
+                        .reduce(0, Integer::sum)
+        ),
+
+        // only one distinct value
+        YATZY(diceSerie -> {
+            boolean serieHasOnlyOneDifferentNumber = diceSerie.getValues().stream()
+                    .distinct().count() == 1;
+            return serieHasOnlyOneDifferentNumber ? 50 : 0;
+        });
 
         private final ToIntFunction<DiceSerie> scoringFunction;
 
@@ -57,16 +68,6 @@ public class Yatzy {
 
     public int scoreDices(RollType rollType) {
         return rollType.score(diceSerie);
-    }
-
-    public static int yatzy(int... dice) {
-        int[] counts = new int[6];
-        for (int die : dice)
-            counts[die - 1]++;
-        for (int i = 0; i != 6; i++)
-            if (counts[i] == 5)
-                return 50;
-        return 0;
     }
 
     public static int ones(int d1, int d2, int d3, int d4, int d5) {
