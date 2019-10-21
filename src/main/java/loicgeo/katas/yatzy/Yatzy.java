@@ -32,6 +32,13 @@ public class Yatzy {
                 diceSerie.getValues().stream()
                         .filter(v -> v == 1)
                         .reduce(0, Integer::sum)
+        ),
+
+        // sum all dice of value 1
+        TWOS(diceSerie ->
+                diceSerie.getValues().stream()
+                        .filter(v -> v == 2)
+                        .reduce(0, Integer::sum)
         );
 
         private final ToIntFunction<DiceSerie> scoringFunction;
