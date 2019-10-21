@@ -14,7 +14,6 @@ import static java.util.stream.Collectors.joining;
 import static loicgeo.katas.yatzy.Yatzy.RollType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnitParamsRunner.class)
 public class YatzyTest {
@@ -296,8 +295,33 @@ public class YatzyTest {
     }
 
     @Test
-    public void fullHouse() {
-        assertEquals(18, Yatzy.fullHouse(6, 2, 2, 2, 6));
-        assertEquals(0, Yatzy.fullHouse(2, 3, 4, 5, 6));
+    public void should_sum_a_full_house_roll() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(6, 2, 2, 2, 6);
+        // when
+        int score = yatzy.scoreDices(FULL_HOUSE);
+        // then
+        assertThat(score).isEqualTo(18);
     }
+
+    @Test
+    public void should_sum_0_a_non_full_house_roll() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(2, 3, 4, 5, 6);
+        // when
+        int score = yatzy.scoreDices(FULL_HOUSE);
+        // then
+        assertThat(score).isEqualTo(0);
+    }
+
+    @Test
+    public void should_sum_0_a_yatzy_for_a_full_house_roll() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(2, 2, 2, 2, 2);
+        // when
+        int score = yatzy.scoreDices(FULL_HOUSE);
+        // then
+        assertThat(score).isEqualTo(0);
+    }
+    
 }

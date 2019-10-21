@@ -53,7 +53,12 @@ public class DiceSerie {
         return countsByValue;
     }
 
+    public boolean hasOnlyOneDifferentNumber() {
+        return values.stream().distinct().count() == 1;
+    }
+
     public Collection<Integer> getValues() {
         return values;
     }
+    
 }

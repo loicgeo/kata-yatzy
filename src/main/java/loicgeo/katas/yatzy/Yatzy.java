@@ -23,9 +23,7 @@ public class Yatzy {
 
         // only one distinct value
         YATZY(diceSerie -> {
-            boolean serieHasOnlyOneDifferentNumber = diceSerie.getValues().stream()
-                    .distinct().count() == 1;
-            return serieHasOnlyOneDifferentNumber ? 50 : 0;
+            return diceSerie.hasOnlyOneDifferentNumber() ? 50 : 0;
         }),
 
         // sum all dice by value
@@ -74,7 +72,16 @@ public class Yatzy {
 
         // sum values for a large straight, meaning composed of a continuous sequence of at least 4 values, finishing by 6
         LARGE_STRAIGHT(diceSerie -> getSortedValues(diceSerie).contains("23456") ? 20 : 0
-        );
+        ),
+
+        // sum values for a set of 3 values X and a couple of values Y, where X is different of Y
+        FULL_HOUSE(diceSerie -> {
+            if (diceSerie.hasOnlyOneDifferentNumber()) {
+                return 0;
+            }
+            return scoreByNbOccurrencesAndNbMatches(diceSerie, 3, 1)
+                    + scoreByNbOccurrencesAndNbMatches(diceSerie, 2, 1);
+        });
 
         private static String getSortedValues(DiceSerie diceSerie) {
             return diceSerie.getValues().stream()
@@ -150,39 +157,6 @@ public class Yatzy {
 
     public int scoreDices(RollType rollType) {
         return rollType.score(diceSerie);
-    }
-
-    public static int fullHouse(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        boolean _2 = false;
-        int i;
-        int _2_at = 0;
-        boolean _3 = false;
-        int _3_at = 0;
-
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 2) {
-                _2 = true;
-                _2_at = i + 1;
-            }
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 3) {
-                _3 = true;
-                _3_at = i + 1;
-            }
-
-        if (_2 && _3)
-            return _2_at * 2 + _3_at * 3;
-        else
-            return 0;
     }
 
 }
