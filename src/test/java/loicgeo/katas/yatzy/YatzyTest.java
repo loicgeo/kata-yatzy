@@ -236,10 +236,33 @@ public class YatzyTest {
     }
 
     @Test
-    public void smallStraight() {
-        assertEquals(15, Yatzy.smallStraight(1, 2, 3, 4, 5));
-        assertEquals(15, Yatzy.smallStraight(2, 3, 4, 5, 1));
-        assertEquals(0, Yatzy.smallStraight(1, 2, 2, 4, 5));
+    public void should_sum_values_of_a_small_straight() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(2, 3, 4, 5, 1);
+        // when
+        int score = yatzy.scoreDices(SMALL_STRAIGHT);
+        // then
+        assertThat(score).isEqualTo(15);
+    }
+
+    @Test
+    public void should_sum_0_for_non_existing_small_straight() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(1, 2, 2, 4, 5);
+        // when
+        int score = yatzy.scoreDices(SMALL_STRAIGHT);
+        // then
+        assertThat(score).isEqualTo(0);
+    }
+
+    @Test
+    public void should_sum_0_on_large_straight_for_a_small_straight_roll() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(2, 3, 4, 5, 6);
+        // when
+        int score = yatzy.scoreDices(SMALL_STRAIGHT);
+        // then
+        assertThat(score).isEqualTo(0);
     }
 
     @Test
