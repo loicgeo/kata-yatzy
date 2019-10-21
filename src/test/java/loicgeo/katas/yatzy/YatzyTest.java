@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import static java.text.MessageFormat.format;
 import static java.util.stream.Collectors.joining;
-import static loicgeo.katas.yatzy.Yatzy.RollType.*;
+import static loicgeo.katas.yatzy.YatzyCategory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -35,7 +35,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 3, 4, 5, 1);
         // when
-        int score = yatzy.scoreDices(CHANCE);
+        int score = yatzy.scoreRoll(CHANCE);
         // then
         assertThat(score).isEqualTo(16);
     }
@@ -45,7 +45,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(4, 4, 4, 4, 4);
         // when
-        int score = yatzy.scoreDices(YATZY);
+        int score = yatzy.scoreRoll(YATZY);
         // then
         assertThat(score).isEqualTo(50);
     }
@@ -55,7 +55,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(6, 6, 6, 6, 3);
         // when
-        int score = yatzy.scoreDices(YATZY);
+        int score = yatzy.scoreRoll(YATZY);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -89,15 +89,15 @@ public class YatzyTest {
 
     @Test
     @Parameters(method = "givenSeriesForEachKindOfValues")
-    public void should_score_several_dice_series_for_each_kind_of_value(int d1, int d2, int d3, int d4, int d5, Yatzy.RollType rollType, int expectedScore) throws FonctionalException {
+    public void should_score_several_dice_series_for_each_kind_of_value(int d1, int d2, int d3, int d4, int d5, YatzyCategory yatzyCategory, int expectedScore) throws FonctionalException {
         // given
         Yatzy yatzy = new Yatzy(d1, d2, d3, d4, d5);
         // when
-        int score = yatzy.scoreDices(rollType);
+        int score = yatzy.scoreRoll(yatzyCategory);
         // then
         assertThat(score)
                 .overridingErrorMessage(format("A {0} roll should score {1} for values ''{2}''",
-                        rollType,
+                        yatzyCategory,
                         expectedScore,
                         Stream.of(d1, d2, d3, d4, d5).map(Object::toString).collect(joining(", "))))
                 .isEqualTo(expectedScore)
@@ -109,7 +109,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 4, 3, 5, 6);
         // when
-        int score = yatzy.scoreDices(PAIR);
+        int score = yatzy.scoreRoll(PAIR);
         // then
         assertThat(score).isEqualTo(6);
     }
@@ -119,7 +119,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(1, 3, 4, 6, 5);
         // when
-        int score = yatzy.scoreDices(PAIR);
+        int score = yatzy.scoreRoll(PAIR);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -129,7 +129,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(5, 3, 6, 6, 5);
         // when
-        int score = yatzy.scoreDices(PAIR);
+        int score = yatzy.scoreRoll(PAIR);
         // then
         assertThat(score).isEqualTo(12);
     }
@@ -139,7 +139,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 3, 3, 4, 1);
         // when
-        int score = yatzy.scoreDices(PAIR);
+        int score = yatzy.scoreRoll(PAIR);
         // then
         assertThat(score).isEqualTo(6);
     }
@@ -149,7 +149,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 3, 5, 4, 5);
         // when
-        int score = yatzy.scoreDices(TWO_PAIRS);
+        int score = yatzy.scoreRoll(TWO_PAIRS);
         // then
         assertThat(score).isEqualTo(16);
     }
@@ -159,7 +159,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 3, 5, 5, 5);
         // when
-        int score = yatzy.scoreDices(TWO_PAIRS);
+        int score = yatzy.scoreRoll(TWO_PAIRS);
         // then
         assertThat(score).isEqualTo(16);
     }
@@ -169,7 +169,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(1, 1, 2, 3, 4);
         // when
-        int score = yatzy.scoreDices(TWO_PAIRS);
+        int score = yatzy.scoreRoll(TWO_PAIRS);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -179,7 +179,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 3, 3, 4, 5);
         // when
-        int score = yatzy.scoreDices(THREE_Of_A_KIND);
+        int score = yatzy.scoreRoll(THREE_Of_A_KIND);
         // then
         assertThat(score).isEqualTo(9);
     }
@@ -189,7 +189,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(1, 3, 5, 4, 5);
         // when
-        int score = yatzy.scoreDices(THREE_Of_A_KIND);
+        int score = yatzy.scoreRoll(THREE_Of_A_KIND);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -199,7 +199,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 3, 3, 3, 5);
         // when
-        int score = yatzy.scoreDices(THREE_Of_A_KIND);
+        int score = yatzy.scoreRoll(THREE_Of_A_KIND);
         // then
         assertThat(score).isEqualTo(9);
     }
@@ -209,7 +209,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 3, 3, 3, 5);
         // when
-        int score = yatzy.scoreDices(FOUR_Of_A_KIND);
+        int score = yatzy.scoreRoll(FOUR_Of_A_KIND);
         // then
         assertThat(score).isEqualTo(12);
     }
@@ -219,7 +219,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(3, 1, 2, 3, 3);
         // when
-        int score = yatzy.scoreDices(FOUR_Of_A_KIND);
+        int score = yatzy.scoreRoll(FOUR_Of_A_KIND);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -229,7 +229,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(2, 2, 2, 2, 2);
         // when
-        int score = yatzy.scoreDices(FOUR_Of_A_KIND);
+        int score = yatzy.scoreRoll(FOUR_Of_A_KIND);
         // then
         assertThat(score).isEqualTo(8);
     }
@@ -239,7 +239,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(2, 3, 4, 5, 1);
         // when
-        int score = yatzy.scoreDices(SMALL_STRAIGHT);
+        int score = yatzy.scoreRoll(SMALL_STRAIGHT);
         // then
         assertThat(score).isEqualTo(15);
     }
@@ -249,7 +249,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(1, 2, 2, 4, 5);
         // when
-        int score = yatzy.scoreDices(SMALL_STRAIGHT);
+        int score = yatzy.scoreRoll(SMALL_STRAIGHT);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -259,7 +259,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(2, 3, 4, 5, 6);
         // when
-        int score = yatzy.scoreDices(SMALL_STRAIGHT);
+        int score = yatzy.scoreRoll(SMALL_STRAIGHT);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -269,7 +269,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(6, 2, 3, 4, 5);
         // when
-        int score = yatzy.scoreDices(LARGE_STRAIGHT);
+        int score = yatzy.scoreRoll(LARGE_STRAIGHT);
         // then
         assertThat(score).isEqualTo(20);
     }
@@ -279,7 +279,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(1, 2, 2, 4, 5);
         // when
-        int score = yatzy.scoreDices(LARGE_STRAIGHT);
+        int score = yatzy.scoreRoll(LARGE_STRAIGHT);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -289,7 +289,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(1, 2, 3, 4, 5);
         // when
-        int score = yatzy.scoreDices(LARGE_STRAIGHT);
+        int score = yatzy.scoreRoll(LARGE_STRAIGHT);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -299,7 +299,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(6, 2, 2, 2, 6);
         // when
-        int score = yatzy.scoreDices(FULL_HOUSE);
+        int score = yatzy.scoreRoll(FULL_HOUSE);
         // then
         assertThat(score).isEqualTo(18);
     }
@@ -309,7 +309,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(2, 3, 4, 5, 6);
         // when
-        int score = yatzy.scoreDices(FULL_HOUSE);
+        int score = yatzy.scoreRoll(FULL_HOUSE);
         // then
         assertThat(score).isEqualTo(0);
     }
@@ -319,7 +319,7 @@ public class YatzyTest {
         // given
         Yatzy yatzy = new Yatzy(2, 2, 2, 2, 2);
         // when
-        int score = yatzy.scoreDices(FULL_HOUSE);
+        int score = yatzy.scoreRoll(FULL_HOUSE);
         // then
         assertThat(score).isEqualTo(0);
     }
