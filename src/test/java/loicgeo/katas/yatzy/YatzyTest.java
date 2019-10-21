@@ -206,10 +206,33 @@ public class YatzyTest {
     }
 
     @Test
-    public void four_of_a_knd() {
-        assertEquals(12, Yatzy.four_of_a_kind(3, 3, 3, 3, 5));
-        assertEquals(20, Yatzy.four_of_a_kind(5, 5, 5, 4, 5));
-        assertEquals(0, Yatzy.four_of_a_kind(3, 1, 2, 3, 3));
+    public void should_score_four_values_of_a_kind() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(3, 3, 3, 3, 5);
+        // when
+        int score = yatzy.scoreDices(FOUR_Of_A_KIND);
+        // then
+        assertThat(score).isEqualTo(12);
+    }
+
+    @Test
+    public void should_score_0_for_none_match_four_values_of_a_kind() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(3, 1, 2, 3, 3);
+        // when
+        int score = yatzy.scoreDices(FOUR_Of_A_KIND);
+        // then
+        assertThat(score).isEqualTo(0);
+    }
+
+    @Test
+    public void should_sum_only_4_values_of_a_5_occurrenced_values_for_a_three_values_of_a_kind() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(2, 2, 2, 2, 2);
+        // when
+        int score = yatzy.scoreDices(FOUR_Of_A_KIND);
+        // then
+        assertThat(score).isEqualTo(8);
     }
 
     @Test

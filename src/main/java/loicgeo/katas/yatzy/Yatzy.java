@@ -59,6 +59,11 @@ public class Yatzy {
         // sum values for value having 3 occurrences
         THREE_Of_A_KIND(diceSerie -> {
             return scoreByNbOccurrencesAndNbMatches(diceSerie, 3, 1);
+        }),
+
+        // sum values for value having 4 occurrences
+        FOUR_Of_A_KIND(diceSerie -> {
+            return scoreByNbOccurrencesAndNbMatches(diceSerie, 4, 1);
         });
 
         /**
@@ -128,20 +133,6 @@ public class Yatzy {
 
     public int scoreDices(RollType rollType) {
         return rollType.score(diceSerie);
-    }
-
-    public static int four_of_a_kind(int _1, int _2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[_1 - 1]++;
-        tallies[_2 - 1]++;
-        tallies[d3 - 1]++;
-        tallies[d4 - 1]++;
-        tallies[d5 - 1]++;
-        for (int i = 0; i < 6; i++)
-            if (tallies[i] >= 4)
-                return (i + 1) * 4;
-        return 0;
     }
 
     public static int smallStraight(int d1, int d2, int d3, int d4, int d5) {
