@@ -69,14 +69,19 @@ public class Yatzy {
         }),
 
         // sum values for a small straight, meaning composed of a continuous sequence of at least 4 values, starting by 1
-        SMALL_STRAIGHT(diceSerie -> diceSerie.getValues().stream()
-                .sorted()
-                .map(Object::toString)
-                .collect(joining(""))
-                .contains("12345")
-                ? 15
-                : 0
+        SMALL_STRAIGHT(diceSerie -> getSortedValues(diceSerie).contains("12345") ? 15 : 0
+        ),
+
+        // sum values for a large straight, meaning composed of a continuous sequence of at least 4 values, finishing by 6
+        LARGE_STRAIGHT(diceSerie -> getSortedValues(diceSerie).contains("23456") ? 20 : 0
         );
+
+        private static String getSortedValues(DiceSerie diceSerie) {
+            return diceSerie.getValues().stream()
+                    .sorted()
+                    .map(Object::toString)
+                    .collect(joining(""));
+        }
 
         /**
          * Score a dice serie according:
@@ -145,19 +150,6 @@ public class Yatzy {
 
     public int scoreDices(RollType rollType) {
         return rollType.score(diceSerie);
-    }
-
-    public static int largeStraight(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-        if (tallies[1] == 1 && tallies[2] == 1 && tallies[3] == 1 && tallies[4] == 1 && tallies[5] == 1)
-            return 20;
-        return 0;
     }
 
     public static int fullHouse(int d1, int d2, int d3, int d4, int d5) {
