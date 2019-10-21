@@ -114,7 +114,7 @@ public class YatzyTest {
         // then
         assertThat(score).isEqualTo(6);
     }
-    
+
     @Test
     public void should_score_0_for_pair_roll_having_none_pair() throws FonctionalException {
         // given
@@ -146,10 +146,33 @@ public class YatzyTest {
     }
 
     @Test
-    public void two_Pair() {
-        assertEquals(16, Yatzy.two_pair(3, 3, 5, 4, 5));
-        assertEquals(16, Yatzy.two_pair(3, 3, 5, 5, 5));
-        assertEquals(0, Yatzy.two_pair(3, 1, 5, 2, 4));
+    public void should_score_a_2_pairs_roll() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(3, 3, 5, 4, 5);
+        // when
+        int score = yatzy.scoreDices(TWO_PAIRS);
+        // then
+        assertThat(score).isEqualTo(16);
+    }
+
+    @Test
+    public void should_score_a_2_pairs_roll_composed_of_3_same_values() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(3, 3, 5, 5, 5);
+        // when
+        int score = yatzy.scoreDices(TWO_PAIRS);
+        // then
+        assertThat(score).isEqualTo(16);
+    }
+
+    @Test
+    public void should_score_0_a_2_pairs_roll_without_2_pairs() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(1, 1, 2, 3, 4);
+        // when
+        int score = yatzy.scoreDices(TWO_PAIRS);
+        // then
+        assertThat(score).isEqualTo(0);
     }
 
     @Test
