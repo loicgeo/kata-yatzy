@@ -25,7 +25,14 @@ public class Yatzy {
             boolean serieHasOnlyOneDifferentNumber = diceSerie.getValues().stream()
                     .distinct().count() == 1;
             return serieHasOnlyOneDifferentNumber ? 50 : 0;
-        });
+        }),
+
+        // sum all dice of value 1
+        ONES(diceSerie ->
+                diceSerie.getValues().stream()
+                        .filter(v -> v == 1)
+                        .reduce(0, Integer::sum)
+        );
 
         private final ToIntFunction<DiceSerie> scoringFunction;
 
@@ -68,22 +75,6 @@ public class Yatzy {
 
     public int scoreDices(RollType rollType) {
         return rollType.score(diceSerie);
-    }
-
-    public static int ones(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 1)
-            sum++;
-        if (d2 == 1)
-            sum++;
-        if (d3 == 1)
-            sum++;
-        if (d4 == 1)
-            sum++;
-        if (d5 == 1)
-            sum++;
-
-        return sum;
     }
 
     public static int twos(int d1, int d2, int d3, int d4, int d5) {

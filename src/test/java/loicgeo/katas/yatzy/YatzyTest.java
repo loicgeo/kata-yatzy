@@ -1,16 +1,18 @@
 package loicgeo.katas.yatzy;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import loicgeo.katas.yatzy.exception.FonctionalException;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static loicgeo.katas.yatzy.Yatzy.RollType.CHANCE;
-import static loicgeo.katas.yatzy.Yatzy.RollType.YATZY;
+import static loicgeo.katas.yatzy.Yatzy.RollType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
+@RunWith(JUnitParamsRunner.class)
 public class YatzyTest {
 
     @Test
@@ -55,12 +57,24 @@ public class YatzyTest {
         assertThat(score).isEqualTo(0);
     }
 
+    public static Object[] givenSeriesForEachKindOfValues() {
+        return new Object[]{
+                new Object[]{1, 2, 3, 4, 5, ONES, 1},
+                new Object[]{1, 2, 1, 4, 5, ONES, 2},
+                new Object[]{6, 2, 2, 4, 5, ONES, 0},
+                new Object[]{1, 1, 1, 1, 1, ONES, 5}
+        };
+    }
+
     @Test
-    public void test_1s() {
-        assertTrue(Yatzy.ones(1, 2, 3, 4, 5) == 1);
-        assertEquals(2, Yatzy.ones(1, 2, 1, 4, 5));
-        assertEquals(0, Yatzy.ones(6, 2, 2, 4, 5));
-        assertEquals(5, Yatzy.ones(1, 1, 1, 1, 1));
+    @Parameters(method = "givenSeriesForEachKindOfValues")
+    public void should_score_several_dice_series_for_each_kind_of_value(int d1, int d2, int d3, int d4, int d5, Yatzy.RollType rollType, int expectedScore) throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(d1, d2, d3, d4, d5);
+        // when
+        int score = yatzy.scoreDices(rollType);
+        // then
+        assertThat(score).isEqualTo(expectedScore);
     }
 
     @Test
