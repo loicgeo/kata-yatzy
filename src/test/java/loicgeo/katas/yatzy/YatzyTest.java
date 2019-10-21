@@ -1,18 +1,37 @@
 package loicgeo.katas.yatzy;
 
+import loicgeo.katas.yatzy.exception.FonctionalException;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 
+import static loicgeo.katas.yatzy.Yatzy.RollType.CHANCE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class YatzyTest {
 
     @Test
-    public void chance_scores_sum_of_all_dice() {
-        int expected = 15;
-        int actual = Yatzy.chance(2, 3, 4, 5, 1);
-        assertEquals(expected, actual);
-        assertEquals(16, Yatzy.chance(3, 3, 4, 5, 1));
+    public void should_throw_an_functional_exception_for_a_wrong_dice_serie_scoring() {
+        // given
+        ThrowableAssert.ThrowingCallable yatzyInstantiation = () -> new Yatzy(0, 3, 4, 5, 1);
+
+        // when
+        // then
+        assertThatThrownBy(yatzyInstantiation)
+                .isInstanceOf(FonctionalException.class)
+                .hasMessageContaining("Wrong dice values");
+    }
+
+    @Test
+    public void should_score_a_dice_serie_for_a_chance_roll() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(3, 3, 4, 5, 1);
+        // when
+        int score = yatzy.scoreDices(CHANCE);
+        // then
+        assertThat(score).isEqualTo(16);
     }
 
     @Test
@@ -45,21 +64,21 @@ public class YatzyTest {
     }
 
     @Test
-    public void fours_test() {
+    public void fours_test() throws FonctionalException {
         assertEquals(12, new Yatzy(4, 4, 4, 5, 5).fours());
         assertEquals(8, new Yatzy(4, 4, 5, 5, 5).fours());
         assertEquals(4, new Yatzy(4, 5, 5, 5, 5).fours());
     }
 
     @Test
-    public void fives() {
+    public void fives() throws FonctionalException {
         assertEquals(10, new Yatzy(4, 4, 4, 5, 5).fives());
         assertEquals(15, new Yatzy(4, 4, 5, 5, 5).fives());
         assertEquals(20, new Yatzy(4, 5, 5, 5, 5).fives());
     }
 
     @Test
-    public void sixes_test() {
+    public void sixes_test() throws FonctionalException {
         assertEquals(0, new Yatzy(4, 4, 4, 5, 5).sixes());
         assertEquals(6, new Yatzy(4, 4, 6, 5, 5).sixes());
         assertEquals(18, new Yatzy(6, 5, 6, 6, 5).sixes());
