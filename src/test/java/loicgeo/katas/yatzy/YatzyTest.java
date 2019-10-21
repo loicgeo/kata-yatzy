@@ -176,10 +176,33 @@ public class YatzyTest {
     }
 
     @Test
-    public void three_of_a_kind() {
-        assertEquals(0, Yatzy.three_of_a_kind(1, 3, 5, 4, 5));
-        assertEquals(9, Yatzy.three_of_a_kind(3, 3, 3, 4, 5));
-        assertEquals(9, Yatzy.three_of_a_kind(3, 3, 3, 3, 5));
+    public void should_score_three_values_of_a_kind() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(3, 3, 3, 4, 5);
+        // when
+        int score = yatzy.scoreDices(THREE_Of_A_KIND);
+        // then
+        assertThat(score).isEqualTo(9);
+    }
+
+    @Test
+    public void should_score_0_for_none_match_three_values_of_a_kind() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(1, 3, 5, 4, 5);
+        // when
+        int score = yatzy.scoreDices(THREE_Of_A_KIND);
+        // then
+        assertThat(score).isEqualTo(0);
+    }
+
+    @Test
+    public void should_sum_only_3_values_of_a_4_occurrenced_values_for_a_three_values_of_a_kind() throws FonctionalException {
+        // given
+        Yatzy yatzy = new Yatzy(3, 3, 3, 3, 5);
+        // when
+        int score = yatzy.scoreDices(THREE_Of_A_KIND);
+        // then
+        assertThat(score).isEqualTo(9);
     }
 
     @Test

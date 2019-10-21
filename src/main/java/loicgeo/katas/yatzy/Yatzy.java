@@ -48,31 +48,44 @@ public class Yatzy {
 
         // sum values for the best pair
         PAIR(diceSerie -> {
-            return scorePairs(diceSerie, 1);
+            return scoreByNbOccurrencesAndNbMatches(diceSerie, 2, 1);
         }),
 
-        // sum values for the best pair
+        // sum values for the best 2 pairs
         TWO_PAIRS(diceSerie -> {
-            return scorePairs(diceSerie, 2);
+            return scoreByNbOccurrencesAndNbMatches(diceSerie, 2, 2);
+        }),
+
+        // sum values for value having 3 occurrences
+        THREE_Of_A_KIND(diceSerie -> {
+            return scoreByNbOccurrencesAndNbMatches(diceSerie, 3, 1);
         });
 
-        private static int scorePairs(DiceSerie diceSerie, int nbPairsToScore) {
+        /**
+         * Score a dice serie according:
+         * <li></li>
+         *
+         * @param diceSerie          a set of dice values
+         * @param nbValueOccurrences number of occurrences to find for any value
+         * @param nbMatches          number to reach of this motif (ex: for a pair, 2 pairs, etc)
+         * @return
+         */
+        private static int scoreByNbOccurrencesAndNbMatches(DiceSerie diceSerie, final int nbValueOccurrences, final int nbMatches) {
             int[] countsByValue = diceSerie.getOccurrenciesByDiceValue();
 
             int score = 0;
             int nbMatchs = 0;
-            int nbOccurrencesMin = 2;
             for (int currentValue = countsByValue.length - 1; currentValue > 0; currentValue--) {
                 int nbOccurrencesOfCurrentValue = countsByValue[currentValue];
-                if (nbOccurrencesOfCurrentValue >= nbOccurrencesMin) {
+                if (nbOccurrencesOfCurrentValue >= nbValueOccurrences) {
                     nbMatchs++;
-                    score += currentValue * Math.min(nbOccurrencesOfCurrentValue, nbOccurrencesMin);
-                    if (nbMatchs >= nbPairsToScore) {
+                    score += currentValue * Math.min(nbOccurrencesOfCurrentValue, nbValueOccurrences);
+                    if (nbMatchs >= nbMatches) {
                         break;
                     }
                 }
             }
-            return nbPairsToScore == nbMatchs ? score : 0;
+            return nbMatches == nbMatchs ? score : 0;
         }
 
         private static Integer sumOccurrencesByValue(DiceSerie diceSerie, int value) {
@@ -128,20 +141,6 @@ public class Yatzy {
         for (int i = 0; i < 6; i++)
             if (tallies[i] >= 4)
                 return (i + 1) * 4;
-        return 0;
-    }
-
-    public static int three_of_a_kind(int d1, int d2, int d3, int d4, int d5) {
-        int[] t;
-        t = new int[6];
-        t[d1 - 1]++;
-        t[d2 - 1]++;
-        t[d3 - 1]++;
-        t[d4 - 1]++;
-        t[d5 - 1]++;
-        for (int i = 0; i < 6; i++)
-            if (t[i] >= 3)
-                return (i + 1) * 3;
         return 0;
     }
 
