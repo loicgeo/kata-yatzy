@@ -7,6 +7,10 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.stream.Stream;
+
+import static java.text.MessageFormat.format;
+import static java.util.stream.Collectors.joining;
 import static loicgeo.katas.yatzy.Yatzy.RollType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -63,8 +67,24 @@ public class YatzyTest {
                 new Object[]{1, 2, 1, 4, 5, ONES, 2},
                 new Object[]{6, 2, 2, 4, 5, ONES, 0},
                 new Object[]{1, 1, 1, 1, 1, ONES, 5},
+
                 new Object[]{1, 2, 3, 2, 6, TWOS, 4},
-                new Object[]{2, 2, 2, 2, 2, TWOS, 10}
+                new Object[]{2, 2, 2, 2, 2, TWOS, 10},
+
+                new Object[]{1, 2, 3, 2, 3, THREES, 6},
+                new Object[]{3, 3, 3, 3, 3, THREES, 15},
+
+                new Object[]{4, 4, 4, 5, 5, FOURS, 12},
+                new Object[]{4, 4, 5, 5, 5, FOURS, 8},
+                new Object[]{4, 5, 5, 5, 5, FOURS, 4},
+
+                new Object[]{4, 4, 4, 5, 5, FIVES, 10},
+                new Object[]{4, 4, 5, 5, 5, FIVES, 15},
+                new Object[]{4, 5, 5, 5, 5, FIVES, 20},
+
+                new Object[]{4, 4, 4, 5, 5, SIXES, 0},
+                new Object[]{4, 4, 6, 4, 5, SIXES, 6},
+                new Object[]{6, 5, 6, 6, 5, SIXES, 18}
         };
     }
 
@@ -76,34 +96,13 @@ public class YatzyTest {
         // when
         int score = yatzy.scoreDices(rollType);
         // then
-        assertThat(score).isEqualTo(expectedScore);
-    }
-
-    @Test
-    public void test_threes() {
-        assertEquals(6, Yatzy.threes(1, 2, 3, 2, 3));
-        assertEquals(15, Yatzy.threes(3, 3, 3, 3, 3));
-    }
-
-    @Test
-    public void fours_test() throws FonctionalException {
-        assertEquals(12, new Yatzy(4, 4, 4, 5, 5).fours());
-        assertEquals(8, new Yatzy(4, 4, 5, 5, 5).fours());
-        assertEquals(4, new Yatzy(4, 5, 5, 5, 5).fours());
-    }
-
-    @Test
-    public void fives() throws FonctionalException {
-        assertEquals(10, new Yatzy(4, 4, 4, 5, 5).fives());
-        assertEquals(15, new Yatzy(4, 4, 5, 5, 5).fives());
-        assertEquals(20, new Yatzy(4, 5, 5, 5, 5).fives());
-    }
-
-    @Test
-    public void sixes_test() throws FonctionalException {
-        assertEquals(0, new Yatzy(4, 4, 4, 5, 5).sixes());
-        assertEquals(6, new Yatzy(4, 4, 6, 5, 5).sixes());
-        assertEquals(18, new Yatzy(6, 5, 6, 6, 5).sixes());
+        assertThat(score)
+                .overridingErrorMessage(format("A {0} roll should score {1} for values ''{2}''",
+                        rollType,
+                        expectedScore,
+                        Stream.of(d1, d2, d3, d4, d5).map(Object::toString).collect(joining(", "))))
+                .isEqualTo(expectedScore)
+        ;
     }
 
     @Test

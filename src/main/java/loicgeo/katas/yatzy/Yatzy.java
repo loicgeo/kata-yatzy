@@ -11,7 +11,6 @@ public class Yatzy {
     private static final Logger LOGGER = Logger.getLogger(Yatzy.class.getName());
 
     private DiceSerie diceSerie;
-    private int[] dice;
 
     public enum RollType {
         // sum all values
@@ -27,19 +26,31 @@ public class Yatzy {
             return serieHasOnlyOneDifferentNumber ? 50 : 0;
         }),
 
-        // sum all dice of value 1
+        // sum all dice by value
         ONES(diceSerie ->
-                diceSerie.getValues().stream()
-                        .filter(v -> v == 1)
-                        .reduce(0, Integer::sum)
+                sumOccurrencesByValue(diceSerie, 1)
         ),
-
-        // sum all dice of value 1
         TWOS(diceSerie ->
-                diceSerie.getValues().stream()
-                        .filter(v -> v == 2)
-                        .reduce(0, Integer::sum)
+                sumOccurrencesByValue(diceSerie, 2)
+        ),
+        THREES(diceSerie ->
+                sumOccurrencesByValue(diceSerie, 3)
+        ),
+        FOURS(diceSerie ->
+                sumOccurrencesByValue(diceSerie, 4)
+        ),
+        FIVES(diceSerie ->
+                sumOccurrencesByValue(diceSerie, 5)
+        ),
+        SIXES(diceSerie ->
+                sumOccurrencesByValue(diceSerie, 6)
         );
+
+        private static Integer sumOccurrencesByValue(DiceSerie diceSerie, int value) {
+            return diceSerie.getValues().stream()
+                    .filter(v -> v == value)
+                    .reduce(0, Integer::sum);
+        }
 
         private final ToIntFunction<DiceSerie> scoringFunction;
 
@@ -71,76 +82,10 @@ public class Yatzy {
             LOGGER.log(Level.SEVERE, "Unable to create Yatzy", exception);
             throw exception;
         }
-
-        dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
     }
 
     public int scoreDices(RollType rollType) {
         return rollType.score(diceSerie);
-    }
-
-    public static int twos(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 2)
-            sum += 2;
-        if (d2 == 2)
-            sum += 2;
-        if (d3 == 2)
-            sum += 2;
-        if (d4 == 2)
-            sum += 2;
-        if (d5 == 2)
-            sum += 2;
-        return sum;
-    }
-
-    public static int threes(int d1, int d2, int d3, int d4, int d5) {
-        int s;
-        s = 0;
-        if (d1 == 3)
-            s += 3;
-        if (d2 == 3)
-            s += 3;
-        if (d3 == 3)
-            s += 3;
-        if (d4 == 3)
-            s += 3;
-        if (d5 == 3)
-            s += 3;
-        return s;
-    }
-
-    public int fours() {
-        int sum;
-        sum = 0;
-        for (int at = 0; at != 5; at++) {
-            if (dice[at] == 4) {
-                sum += 4;
-            }
-        }
-        return sum;
-    }
-
-    public int fives() {
-        int s = 0;
-        int i;
-        for (i = 0; i < dice.length; i++)
-            if (dice[i] == 5)
-                s = s + 5;
-        return s;
-    }
-
-    public int sixes() {
-        int sum = 0;
-        for (int at = 0; at < dice.length; at++)
-            if (dice[at] == 6)
-                sum = sum + 6;
-        return sum;
     }
 
     public static int score_pair(int d1, int d2, int d3, int d4, int d5) {
