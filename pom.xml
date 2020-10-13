@@ -16,7 +16,7 @@
 
         <!--dependencies-->
         <assertj.version>3.13.2</assertj.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <cucumber.version>4.2.6</cucumber.version>
         <junit.param.version>1.1.1</junit.param.version>
     </properties>
